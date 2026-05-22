@@ -102,4 +102,6 @@ URL Base para todas as requisições: \`http://localhost:8080\`
   "toCoin": "NCR",
   "amount": 50.0
   }
+
+  #FUTURAMENTE IMPLEMENTAREI UMA UI E TAMBÉM SUBIR EM UM DOMINIO
   \`\`\`
