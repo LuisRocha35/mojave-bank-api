@@ -45,13 +45,6 @@ public class AccountService {
         return convertToResponseDTO(account);
     }
 
-    public List<AccountResponseDTO> listAllAccounts() {
-        return accountRepository.findAll()
-                .stream()
-                .map(this::convertToResponseDTO)
-                .collect(Collectors.toList());
-    }
-
     public AccountResponseDTO updateAccount(String number, AccountUpdateRequestDTO dto) {
         // 1. busca uma conta existente
         Account account = accountRepository.findByNumber(number)
@@ -67,13 +60,43 @@ public class AccountService {
         return convertToResponseDTO(updatedAccount);
     }
 
-    public void deleteAccount(String number, String adminNumber) {
-        if (number.equals(adminNumber)) {
-            throw new IllegalArgumentException("Cannot delete the admin account.");
+    public List<AccountResponseDTO> listAllAccounts(String adminNumber) {
+        // Verifica conta
+        Account adminAccount = accountRepository.findByNumber(adminNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Admin account not found."));
+
+        //  Verifica se tem flag admin
+        if (!adminAccount.isAdmin()) {
+            throw new IllegalArgumentException("Acesso negado: Apenas administradores podem listar todas as contas.");
         }
-        Account account = accountRepository.findByNumber(number)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found."));
-        accountRepository.delete(account);
+
+        // Se for admin deu bom e devolve a lista
+        return accountRepository.findAll()
+                .stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteAccount(String number, String adminNumber) {
+        // Verifica quem tenta apagar a conta
+        Account adminAccount = accountRepository.findByNumber(adminNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Admin account not found."));
+
+        // Verifica a flag admin
+        if (!adminAccount.isAdmin()) {
+            throw new IllegalArgumentException("Acesso negado: Apenas administradores podem apagar contas.");
+        }
+
+        // Impede se o admin se apague ele mesmo
+        if (number.equals(adminNumber)) {
+            throw new IllegalArgumentException("Não pode apagar a sua própria conta de administrador.");
+        }
+
+        // Busca o alvo e apaga
+        Account targetAccount = accountRepository.findByNumber(number)
+                .orElseThrow(() -> new IllegalArgumentException("Target account not found."));
+
+        accountRepository.delete(targetAccount);
     }
 
     // Auxiliar para mapear Entidade -> DTO

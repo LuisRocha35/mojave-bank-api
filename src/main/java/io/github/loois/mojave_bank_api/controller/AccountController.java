@@ -25,8 +25,8 @@ public class AccountController {
     }
 
     @GetMapping // Responde GET para /api/accounts
-    public ResponseEntity<List<AccountResponseDTO>> getAllAccounts() {
-        List<AccountResponseDTO> accounts = accountService.listAllAccounts();
+    public ResponseEntity<List<AccountResponseDTO>> getAllAccounts(@RequestParam String adminNumber) {
+        List<AccountResponseDTO> accounts = accountService.listAllAccounts(adminNumber);
         return ResponseEntity.ok(accounts);
     }
 
