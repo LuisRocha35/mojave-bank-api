@@ -13,8 +13,18 @@ API RESTful desenvolvida em Spring Boot (Java 21) para o sistema bancário de Mo
    No IntelliJ, execute a classe principal \`MojaveBankApiApplication\`. A API ficará disponível em \`http://localhost:8080\`.
 
 ---
+## 🌐 Interface de Testes no Navegador (Swagger UI)
 
-## Guia de Testes no Postman
+A API conta com documentação interativa integrada. Isto significa que pode criar contas, realizar depósitos, transferências e câmbios diretamente pelo navegador, sem necessidade de instalar ferramentas como o Postman.
+
+### Como Testar:
+1. Garanta que a API e o banco de dados estão a rodar.
+2. Abra o seu navegador e aceda ao endereço:
+   ```url
+   http://localhost:8080/swagger-ui/index.html
+
+
+## Guia de Testes se quiser no Postman
 
 URL Base para todas as requisições: \`http://localhost:8080\`
 
